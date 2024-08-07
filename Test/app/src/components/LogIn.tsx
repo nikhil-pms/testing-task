@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
+import { useRouter } from "next/navigation";
 
 const styles = {
   container: {
@@ -69,9 +70,11 @@ const styles = {
 };
 
 const LoginPage: React.FC = () => {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [captchaValue, setCaptchaValue] = useState<string | null>(null);
+  const router = useRouter();
 
   const validatePassword = (value: string) => {
     const lengthRequirement = /.{7,}/;
@@ -108,13 +111,34 @@ const LoginPage: React.FC = () => {
     setCaptchaValue(value);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!captchaValue) {
-      alert("Please complete the CAPTCHA");
-      return;
+    // if (!captchaValue) {
+    //   alert("Please complete the CAPTCHA");
+    //   return;
+    // }
+
+    try {
+      const response = await fetch("http://19.168.1.36:8080/user/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("===========>", data);
+
+        // router.push("dashboard");
+      } else {
+        alert("Login failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("An error occurred. Please try again.");
     }
-    // Handle form submission here
   };
 
   return (
@@ -128,6 +152,8 @@ const LoginPage: React.FC = () => {
               type="text"
               style={styles.input}
               placeholder="Enter your username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </div>
           <div style={styles.inputGroup}>
@@ -141,13 +167,13 @@ const LoginPage: React.FC = () => {
             />
             {passwordError && <div style={styles.error}>{passwordError}</div>}
           </div>
-          <div style={styles.inputGroup}>
+          {/* <div style={styles.inputGroup}>
             <label style={styles.label}>CAPTCHA</label>
             <ReCAPTCHA
               sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ""}
               onChange={handleCaptchaChange}
             />
-          </div>
+          </div> */}
           <button type="submit" style={styles.button}>
             Login
           </button>
