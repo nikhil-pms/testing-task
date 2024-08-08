@@ -1,0 +1,51 @@
+[
+  {
+    "id": 1,
+    "name": "Root",
+    "children": [
+      {
+        "id": 2,
+        "name": "Child 1",
+        "children": [
+          {
+            "id": 5,
+            "name": "Grandchild 1",
+            "children": [
+              {
+                "id": 11,
+                "name": "Great-Grandchild 1",
+                "children": []
+              },
+              {
+                "id": 12,
+                "name": "Great-Grandchild 2",
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": 6,
+            "name": "Grandchild 2",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "name": "Child 2",
+        "children": [
+          {
+            "id": 7,
+            "name": "Grandchild 3",
+            "children": []
+          },
+          {
+            "id": 8,
+            "name": "Grandchild 4",
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+]
